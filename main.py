@@ -39,3 +39,19 @@ for result in results:
 plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
 plt.axis('off')
 plt.show()
+
+# Train YOLO on custom dataset
+# from ultralytics import YOLO
+#
+# model = YOLO('yolov10s.pt')
+#
+# # YOLO Training starten
+# model.train(
+#     data='path/to/dataset/data.yaml',  # Pfad zur YAML-Datei, die den Datensatz beschreibt
+#     epochs=100,  # Anzahl der Trainingsdurchläufe
+#     imgsz=640,  # Bildgröße
+#     batch=16,  # Batch-Größe
+#     name='custom_yolov10_model',  # Name des gespeicherten Modells
+#     pretrained=True  # Verwenden von vortrainierten Gewichten (Transfer Learning)
+# )
+
