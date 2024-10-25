@@ -1,0 +1,7 @@
+path: ../dataset/256
+
+train: images
+val: images
+
+names:
+    0: waldo
