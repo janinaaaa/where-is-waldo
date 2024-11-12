@@ -10,3 +10,5 @@ def crop_image(image_path):
     # Save the image
     cv2.imwrite(image_path, image)
     print("Image cropped successfully")
+
+crop_image("screenshot.jpg")
