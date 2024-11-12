@@ -14,6 +14,8 @@ def crop_image(image_path):
 
 
 # write a fuction that takes an image and cuts in it smaller images of size 256x256
+# TODO Add padding to the image so that the last image is not cut off
+# TODO Function to set the images together to form the original image
 def cut_image(image_path):
     # Delete output folder if it exists
     try:
