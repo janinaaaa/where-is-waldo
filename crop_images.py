@@ -1,7 +1,7 @@
 import cv2
 import os, shutil
 
-OUTPUT_PATH = "output/cropped_images"
+OUTPUT_PATH = "output/crop/images"
 
 # Function to crop the image
 def crop_image(image_path):
@@ -32,11 +32,8 @@ def cut_image(image_path):
     except:
         pass
 
-    # Check if output folder exists else create it
-    if not os.path.exists("output"):
-        os.mkdir("output")
     if not os.path.exists(OUTPUT_PATH):
-        os.mkdir(OUTPUT_PATH)
+        os.makedirs(OUTPUT_PATH)
         
     # Read the image
     image = cv2.imread(image_path)

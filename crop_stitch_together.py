@@ -1,0 +1,1 @@
+# Stitch multiple images together and combine the Bounding Boxes
