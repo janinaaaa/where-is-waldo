@@ -1,6 +1,8 @@
 import cv2
 import os, shutil
 
+OUTPUT_PATH = "output/cropped_images"
+
 # Function to crop the image
 def crop_image(image_path):
     # Read the image
@@ -26,15 +28,15 @@ def pad_image(image, size):
 def cut_image(image_path):
     # Delete output folder if it exists
     try:
-        shutil.rmtree("output/cropped_images")
+        shutil.rmtree(OUTPUT_PATH)
     except:
         pass
 
     # Check if output folder exists else create it
     if not os.path.exists("output"):
         os.mkdir("output")
-    if not os.path.exists("output/cropped_images"):
-        os.mkdir("output/cropped_images")
+    if not os.path.exists(OUTPUT_PATH):
+        os.mkdir(OUTPUT_PATH)
         
     # Read the image
     image = cv2.imread(image_path)
@@ -54,7 +56,7 @@ def cut_image(image_path):
             padded_image = pad_image(cropped_image, crop_size)
             # Save the cropped image in an output folder
 
-            cv2.imwrite(f"output/cropped_images/{imagename}{i}_{j}.jpg", padded_image)
+            cv2.imwrite(f"{OUTPUT_PATH}/{imagename}{i}_{j}.jpg", padded_image)
     print("Image cropped successfully")
 
     for i in range(128, height, crop_size):
@@ -68,7 +70,7 @@ def cut_image(image_path):
             # Save the cropped image in an output folder
 
 
-            cv2.imwrite(f"output/cropped_images/{imagename}_offset_{i}_{j}.jpg", padded_image)
+            cv2.imwrite(f"{OUTPUT_PATH}/{imagename}_offset_{i}_{j}.jpg", padded_image)
 
 crop_image("screenshot.jpg")
 cut_image("m.jpg")
