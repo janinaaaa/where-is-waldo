@@ -1,7 +1,9 @@
 import cv2
 import os, shutil
+import json
 
-OUTPUT_PATH = "output/cropped_images"
+OUTPUT_PATH = "output/cut/images"
+analytic_output = {"images" : []}
 
 # Function to crop the image
 def crop_image(image_path):
@@ -25,18 +27,15 @@ def pad_image(image, size):
 # write a fuction that takes an image and cuts in it smaller images of size 256x256
 # TODO Add padding to the image so that the last image is not cut off
 # TODO Function to set the images together to form the original image
-def cut_image(image_path):
+def cut_image(image_path, analytic_output):
     # Delete output folder if it exists
     try:
         shutil.rmtree(OUTPUT_PATH)
     except:
         pass
 
-    # Check if output folder exists else create it
-    if not os.path.exists("output"):
-        os.mkdir("output")
     if not os.path.exists(OUTPUT_PATH):
-        os.mkdir(OUTPUT_PATH)
+        os.makedirs(OUTPUT_PATH)
         
     # Read the image
     image = cv2.imread(image_path)
@@ -55,8 +54,9 @@ def cut_image(image_path):
             cropped_image = image[y1:y2, x1:x2]
             padded_image = pad_image(cropped_image, crop_size)
             # Save the cropped image in an output folder
-
-            cv2.imwrite(f"{OUTPUT_PATH}/{imagename}{i}_{j}.jpg", padded_image)
+            path = f"{OUTPUT_PATH}/{imagename}_{i}_{j}.jpg"
+            analytic_output["images"].append(path)
+            cv2.imwrite(path, padded_image)
     print("Image cropped successfully")
 
     for i in range(128, height, crop_size):
@@ -69,8 +69,15 @@ def cut_image(image_path):
             padded_image = pad_image(cropped_image, crop_size)
             # Save the cropped image in an output folder
 
+            path = f"{OUTPUT_PATH}/{imagename}_{i}_{j}.jpg"
+            analytic_output["images"].append(path)
+            cv2.imwrite(path, padded_image)
 
-            cv2.imwrite(f"{OUTPUT_PATH}/{imagename}_offset_{i}_{j}.jpg", padded_image)
+# Write a function that saves the analytics output to output/crop/analytics.json
+def save_analytics(analytic_output):
+    with open(f"output/cut/analytics.json", "w") as f:
+        json.dump(analytic_output, f)
 
 crop_image("screenshot.jpg")
-cut_image("m.jpg")
+cut_image("m.jpg", analytic_output)
+save_analytics(analytic_output)
