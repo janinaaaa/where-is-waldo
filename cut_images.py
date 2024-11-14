@@ -78,6 +78,5 @@ def save_analytics(analytic_output):
     with open(f"output/cut/analytics.json", "w") as f:
         json.dump(analytic_output, f)
 
-crop_image("screenshot.jpg")
-cut_image("m.jpg", analytic_output)
+cut_image("departmentstore.jpg", analytic_output)
 save_analytics(analytic_output)
