@@ -80,7 +80,7 @@ done_count = 0
 image_count = len(analytics_data["images"])
 
 for image_path in analytics_data["images"]:
-    predict_for_image(image_path, colors, labels, analytics_data)
+    predict_for_image(image_path["path"], colors, labels, analytics_data)
     done_count += 1
     print(f"predict: {done_count}/{image_count}")
 

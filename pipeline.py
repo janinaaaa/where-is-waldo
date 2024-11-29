@@ -2,6 +2,8 @@
 import cmd, os
 import json
 import shutil
+from sys import platform
+
 
 class Pipe(cmd.Cmd):
     prompt = "waldo: "
@@ -40,8 +42,17 @@ class Pipe(cmd.Cmd):
 
         if analytics:
             print("Outputting analytics")
-            # open html report.html in browser
-            os.system("start report.html") 
+
+            match(platform):
+                case "linux" | "linux2":
+                    os.system("xdg-open report.html")
+                case "darwin":
+                    os.system("open report.html")
+                case "win32":
+                    os.system("start report.html")
+                case _:
+                    print("Unsupported platform")
+                
     
     def help_predict(self):
         print("Predict the location of Waldo in the image using the trained model, set cut_technique to True to cut the image into smaller images, set scale_technique to True to scale the image to 256x256, set analytics to True to show analytics output")
