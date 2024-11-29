@@ -9,20 +9,23 @@ class Pipe(cmd.Cmd):
     prompt = "waldo: "
     intro = "Welcome to the Waldo pipeline!"
 
-    def do_predict(self, cut_technique=False, scale_technique=False, analytics=True, clean=True):
+    def do_predict(self, cut_technique=False, scale_technique=False, analytics=False, clean=False):
 
         trained_model_exists = os.path.exists("best.pt")
 
-        if clean:
+        print("Predicting the location of Waldo in the image")
+
+        if not clean:
             errorCode = shutil.rmtree("output/", ignore_errors=True)
 
         if not trained_model_exists:
             print("Model not found. Please train the model first with waldo: train")
             return
-        if cut_technique:
+        
+        if not cut_technique:
             print("Cutting the image")
             # call cut_image.py 
-            exit_code = os.system(f"python cut_images.py")
+            exit_code = os.system("python cut_images.py")
             if exit_code != 0:
                 print("Image cutting failed")
                 return
@@ -31,16 +34,16 @@ class Pipe(cmd.Cmd):
             print("predicting")
 
             # call cut_predict.py
-            exit_code = os.system(f"python cut_predict.py")
+            exit_code = os.system("python cut_predict.py")
             if exit_code != 0:
                 print("Prediction failed")
                 return
             print("Prediction successful")
 
-        if scale_technique:
+        if not scale_technique:
             print("Scaling the image")
 
-        if analytics:
+        if not analytics:
             print("Outputting analytics")
 
             match(platform):

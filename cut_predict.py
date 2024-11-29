@@ -77,9 +77,9 @@ def save_analytics(analytic_output):
         json.dump(analytic_output, f)
 
 done_count = 0
-image_count = len(analytics_data["images"])
+image_count = len(analytics_data["cut"]["images"])
 
-for image_path in analytics_data["images"]:
+for image_path in analytics_data["cut"]["images"]:
     predict_for_image(image_path["path"], colors, labels, analytics_data)
     done_count += 1
     print(f"predict: {done_count}/{image_count}")

@@ -65,7 +65,7 @@ def cut(offset, analytic_output, image, height, width, crop_size, imagename):
             crop_time_end = timer()
             single_image_crop_time = crop_time_end - crop_time_start
             data = {"path": path, "time": single_image_crop_time}
-            analytic_output["images"].append(data)
+            analytic_output["cut"]["images"].append(data)
 
 # Write a function that saves the analytics output to output/crop/analytics.json
 def save_analytics(analytic_output):
