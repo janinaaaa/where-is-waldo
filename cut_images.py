@@ -1,10 +1,10 @@
 import cv2
 import os, shutil
 import json
+import analytics
 from timeit import default_timer as timer
 
 OUTPUT_PATH = "output/cut/images"
-analytic_output = {"cut" : {"images": []}}
 
 # Function to crop the image
 def crop_image(image_path):
@@ -27,7 +27,7 @@ def pad_image(image, size):
 
 # write a fuction that takes an image and cuts in it smaller images of size 256x256
 # TODO Function to set the images together to form the original image
-def cut_image(image_path, analytic_output):
+def cut_image(image_path):
     # Delete output folder if it exists
     try:
         shutil.rmtree(OUTPUT_PATH)
@@ -45,11 +45,12 @@ def cut_image(image_path, analytic_output):
     crop_size = 256
     imagename = image_path.split(".")[0]
     # Loop over the image and crop it into smaller images
-    cut(0, analytic_output, image, height, width, crop_size, imagename)
-    cut(128, analytic_output, image, height, width, crop_size, imagename)
+    cut(0, image, height, width, crop_size, imagename)
+    cut(128, image, height, width, crop_size, imagename)
     print("Image cropped successfully")
 
-def cut(offset, analytic_output, image, height, width, crop_size, imagename):
+def cut(offset, image, height, width, crop_size, imagename):
+    images_data = []
     for i in range(offset, height, crop_size):
         for j in range(0, width, crop_size):
             crop_time_start = timer()
@@ -64,18 +65,11 @@ def cut(offset, analytic_output, image, height, width, crop_size, imagename):
             cv2.imwrite(path, padded_image)
             crop_time_end = timer()
             single_image_crop_time = crop_time_end - crop_time_start
-            data = {"path": path, "time": single_image_crop_time}
-            analytic_output["cut"]["images"].append(data)
-
-# Write a function that saves the analytics output to output/crop/analytics.json
-def save_analytics(analytic_output):
-    with open(f"output/cut/analytics.json", "w") as f:
-        json.dump(analytic_output, f)
-
+            data = {"path": path, "cut_time": single_image_crop_time}
+            analytics.append(data, "cut/images")
 start = timer()
-cut_image("departmentstore.jpg", analytic_output)
+cut_image("departmentstore.jpg")
 end = timer()
 
 time = end - start
-analytic_output["time"] = time # Time taken in seconds
-save_analytics(analytic_output)
+analytics.write(time, "cut/cut_time")
