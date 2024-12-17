@@ -65,7 +65,7 @@ def cut(offset, image, height, width, crop_size, imagename):
             cv2.imwrite(path, padded_image)
             crop_time_end = timer()
             single_image_crop_time = crop_time_end - crop_time_start
-            data = {"path": path, "cut_time": single_image_crop_time}
+            data = {"path": path, "cut_time": single_image_crop_time, "offset-x" : x1, "offset-y" : y1, "width_without_padding": cropped_image.shape[1], "height_without_padding": cropped_image.shape[0], "width_with_padding" : crop_size, "height_with_padding" : crop_size}
             analytics.append(data, "cut/images")
 start = timer()
 cut_image("departmentstore.jpg")
