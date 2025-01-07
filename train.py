@@ -1,10 +1,7 @@
 from ultralytics import YOLO
-import cv2
-import matplotlib.pyplot as plt
 
 # Load Model
 model = YOLO('yolov10s.pt')
-
 
 model.train(
     data='dataset.yaml',  # Pfad zur YAML-Datei, die den Datensatz beschreibt
