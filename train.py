@@ -4,11 +4,9 @@ from ultralytics import YOLO
 model = YOLO('yolov10s.pt')
 
 model.train(
-    data='dataset.yaml',  # Dataset
-    epochs=100,
-    imgsz=256,  # Image Size
-    batch=-1,
-    name='custom_yolov10_model',  # Name of trained model
-    pretrained=True  # Pretrained Weights (Transfer Learning)
+    data='dataset.yaml',  # Pfad zur YAML-Datei, die den Datensatz beschreibt
+    epochs=100,  # Anzahl der Trainingsdurchläufe
+    batch=-1,  # Batch-Größe
+    name='custom_yolov10_model',  # Name des gespeicherten Modells
+    pretrained=True  # Verwenden von vortrainierten Gewichten (Transfer Learning)
 )
-

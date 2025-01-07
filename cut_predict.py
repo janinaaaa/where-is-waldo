@@ -5,22 +5,12 @@ import numpy as np
 import os
 import sys
 import json
+import analytics
 from contextlib import redirect_stdout
 
 OUTPUT_PATH = "output/cut/images"
 
-analytics_data = None
-
-# Load Json from output/cut/analytics.json
-with open('output/cut/analytics.json', 'r') as f:
-    analytics_data = json.load(f)
-
-
-if analytics_data is None:
-    print("No analytics data found. Please run the pipeline with the predict command first")
-    sys.exit(1)
-
-analytics_data["bounding_boxes"] = []
+analytics.write([], "cut/bounding_boxes")
 
 # Load Model
 model = YOLO('./best.pt')
@@ -30,7 +20,7 @@ colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255)]
 labels = model.names
 
 
-def predict_for_image(IMAGE_PATH, colors, labels, analytics_data):
+def predict_for_image(IMAGE_PATH, colors, labels):
 
     with open(os.devnull, 'w') as devnull:
         with redirect_stdout(devnull):
@@ -45,13 +35,15 @@ def predict_for_image(IMAGE_PATH, colors, labels, analytics_data):
             # Coordinates of the bounding box
             x1, y1, x2, y2 = map(int, box.xyxy[0])
 
-            analytics_data["bounding_boxes"].append({
+            data = {
                 "image_path": IMAGE_PATH,
                 "x1": x1,
                 "y1": y1,
                 "x2": x2,
                 "y2": y2
-            })
+            }
+
+            analytics.append(data,"cut/bounding_boxes")
             # Confidence of the detected object
             conf = box.conf[0]
             
@@ -72,16 +64,10 @@ def predict_for_image(IMAGE_PATH, colors, labels, analytics_data):
         os.makedirs(os.path.dirname(output_image_path), exist_ok=True)
         cv2.imwrite(output_image_path, img)
 
-def save_analytics(analytic_output):
-    with open("output/cut/analytics.json", "w") as f:
-        json.dump(analytic_output, f)
-
 done_count = 0
-image_count = len(analytics_data["images"])
+image_count = len(analytics.get("cut/images"))
 
-for image_path in analytics_data["images"]:
-    predict_for_image(image_path, colors, labels, analytics_data)
+for image_path in analytics.get("cut/images"):
+    predict_for_image(image_path["path"], colors, labels)
     done_count += 1
     print(f"predict: {done_count}/{image_count}")
-
-save_analytics(analytics_data)
